@@ -20,17 +20,22 @@
     <!-- Left Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="logo">
-            <i class="fas fa-water"></i>
-            <h1>Delhi<br>Water Watch</h1>
+            <div class="logo-icon">
+                <i class="fas fa-water"></i>
+            </div>
+            <div class="logo-text">
+                <h1>WaterWatch</h1>
+                <p>Delhi Monitoring</p>
+            </div>
         </div>
         
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-chevron-left"></i>
         </button>
         
         <nav class="nav-menu">
             <a href="#" class="nav-item active" data-section="dashboard" data-tooltip="Dashboard">
-                <i class="fas fa-home"></i>
+                <i class="fas fa-th-large"></i>
                 <span>Dashboard</span>
             </a>
             <a href="#" class="nav-item" data-section="map" data-tooltip="Live Map">
@@ -38,7 +43,7 @@
                 <span>Live Map</span>
             </a>
             <a href="#" class="nav-item" data-section="hotspots" data-tooltip="Hotspots">
-                <i class="fas fa-exclamation-triangle"></i>
+                <i class="fas fa-exclamation-circle"></i>
                 <span>Hotspots</span>
             </a>
             <a href="#" class="nav-item" data-section="predictions" data-tooltip="Predictions">
@@ -56,13 +61,19 @@
         </nav>
 
         <div class="sidebar-footer">
-            <div class="weather-widget">
-                <i class="fas fa-cloud-rain"></i>
-                <div>
-                    <p class="weather-temp">28°C</p>
-                    <p class="weather-status">Moderate Rain</p>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <p class="user-name">Admin</p>
+                    <p class="user-role">Administrator</p>
                 </div>
             </div>
+            <button class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
         </div>
     </aside>
 
@@ -73,20 +84,25 @@
     <main class="main-content">
         <!-- Dashboard Section -->
         <section id="dashboard" class="content-section active">
-            <div class="header">
-                <div>
-                    <h2>Dashboard Overview</h2>
-                    <p class="subtitle">Real-time water-logging monitoring across Delhi</p>
-                </div>
-                <div class="header-actions">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search location...">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <div class="welcome-badge">
+                        <i class="fas fa-hand-sparkles"></i>
+                        <span>Welcome back, Admin</span>
                     </div>
-                    <button class="btn-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge">3</span>
-                    </button>
+                    <h1>Delhi Water-Logging Monitor</h1>
+                    <p>Managing water-logging hotspots with real-time monitoring. Every alert counts, every action matters.</p>
+                    <div class="banner-badges">
+                        <span class="badge-pill badge-purple">
+                            <i class="fas fa-user-shield"></i>
+                            Administrator
+                        </span>
+                        <span class="badge-pill badge-green">
+                            <i class="fas fa-circle"></i>
+                            System Active
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -213,13 +229,23 @@
                     <h2>Live Water-Logging Map</h2>
                     <p class="subtitle">Interactive map showing real-time conditions</p>
                 </div>
-                <div class="map-controls">
-                    <button class="btn-secondary"><i class="fas fa-layer-group"></i> Layers</button>
-                    <button class="btn-secondary"><i class="fas fa-filter"></i> Filter</button>
-                    <button class="btn-primary"><i class="fas fa-sync"></i> Refresh</button>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search location...">
+                    </div>
+                    <button class="btn-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
                 </div>
             </div>
-            <div class="map-container">
+            <div class="map-controls">
+                <button class="btn-secondary"><i class="fas fa-layer-group"></i> Layers</button>
+                <button class="btn-secondary"><i class="fas fa-filter"></i> Filter</button>
+                <button class="btn-primary"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+            <div class="map-container" style="margin-top: 1.5rem;">
                 <div id="main-map"></div>
                 <div class="map-legend">
                     <h4>Legend</h4>
@@ -249,6 +275,12 @@
                 <div>
                     <h2>Water-Logging Hotspots</h2>
                     <p class="subtitle">Detailed analysis of problem areas</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search hotspots...">
+                    </div>
                 </div>
             </div>
             <div class="hotspots-grid">
