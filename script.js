@@ -1,15 +1,88 @@
+// Sidebar Toggle
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+const mainContent = document.querySelector('.main-content');
+
+sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('collapsed');
+
+    // On mobile, toggle mobile-open class
+    if (window.innerWidth <= 640) {
+        sidebar.classList.toggle('mobile-open');
+    }
+
+    // Invalidate map sizes after sidebar animation
+    setTimeout(() => {
+        if (typeof previewMap !== 'undefined') previewMap.invalidateSize();
+        if (typeof mainMap !== 'undefined') mainMap.invalidateSize();
+    }, 400);
+
+    // Save state to localStorage
+    const isCollapsed = sidebar.classList.contains('collapsed');
+    localStorage.setItem('sidebarCollapsed', isCollapsed);
+});
+
+// Restore sidebar state from localStorage
+window.addEventListener('DOMContentLoaded', () => {
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    if (savedState === 'true' && window.innerWidth > 640) {
+        sidebar.classList.add('collapsed');
+    }
+});
+
+// Handle window resize
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        if (window.innerWidth <= 640) {
+            sidebar.classList.remove('collapsed');
+        } else if (window.innerWidth <= 768) {
+            sidebar.classList.remove('mobile-open');
+        } else {
+            const savedState = localStorage.getItem('sidebarCollapsed');
+            if (savedState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
+        }
+    }, 250);
+});
+
+// Close sidebar on mobile when clicking outside
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 640) {
+        if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('mobile-open');
+        }
+    }
+});
+
+// Click overlay to close sidebar
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('mobile-open');
+    });
+}
+
 // Navigation
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
-        
+
         const section = item.dataset.section;
         document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
         document.getElementById(section).classList.add('active');
-        
+
+        // Close mobile sidebar after navigation
+        if (window.innerWidth <= 640) {
+            sidebar.classList.remove('mobile-open');
+        }
+
         if (section === 'map') {
             setTimeout(() => mainMap.invalidateSize(), 100);
         }
@@ -55,7 +128,7 @@ setTimeout(() => {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(previewMap);
-    
+
     addHotspotMarkers(previewMap);
 }, 500);
 
@@ -66,7 +139,7 @@ if (mainMapElement) {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(mainMap);
-    
+
     addHotspotMarkers(mainMap);
 }
 
@@ -84,11 +157,11 @@ function addHotspotMarkers(map) {
         { name: 'Anand Vihar', coords: [28.6469, 77.3158], severity: 'moderate' },
         { name: 'Mayur Vihar', coords: [28.6079, 77.2983], severity: 'moderate' }
     ];
-    
+
     locations.forEach(loc => {
-        const color = loc.severity === 'critical' ? '#dc2626' : 
-                     loc.severity === 'high' ? '#f59e0b' : '#3b82f6';
-        
+        const color = loc.severity === 'critical' ? '#dc2626' :
+            loc.severity === 'high' ? '#f59e0b' : '#3b82f6';
+
         const marker = L.circleMarker(loc.coords, {
             radius: 10,
             fillColor: color,
@@ -97,7 +170,7 @@ function addHotspotMarkers(map) {
             opacity: 1,
             fillOpacity: 0.8
         }).addTo(map);
-        
+
         marker.bindPopup(`
             <div style="padding: 0.5rem;">
                 <h4 style="margin-bottom: 0.5rem; font-weight: 600;">${loc.name}</h4>
@@ -147,7 +220,7 @@ if (riskZones) {
         { name: 'East Delhi', risk: 'Moderate', probability: '55%' },
         { name: 'West Delhi', risk: 'Low', probability: '30%' }
     ];
-    
+
     zones.forEach(zone => {
         const item = document.createElement('div');
         item.style.cssText = 'padding: 1rem; background: #f8fafc; border-radius: 12px;';
@@ -197,7 +270,7 @@ if (typeof Chart !== 'undefined') {
             }
         });
     }
-    
+
     // Trends Chart
     const trendsCtx = document.getElementById('trends-chart');
     if (trendsCtx) {
@@ -220,7 +293,7 @@ if (typeof Chart !== 'undefined') {
             }
         });
     }
-    
+
     // Ward Chart
     const wardCtx = document.getElementById('ward-chart');
     if (wardCtx) {

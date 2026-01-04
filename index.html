@@ -18,34 +18,38 @@
 </head>
 <body>
     <!-- Left Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="logo">
             <i class="fas fa-water"></i>
             <h1>Delhi<br>Water Watch</h1>
         </div>
         
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+        
         <nav class="nav-menu">
-            <a href="#" class="nav-item active" data-section="dashboard">
+            <a href="#" class="nav-item active" data-section="dashboard" data-tooltip="Dashboard">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="nav-item" data-section="map">
+            <a href="#" class="nav-item" data-section="map" data-tooltip="Live Map">
                 <i class="fas fa-map-marked-alt"></i>
                 <span>Live Map</span>
             </a>
-            <a href="#" class="nav-item" data-section="hotspots">
+            <a href="#" class="nav-item" data-section="hotspots" data-tooltip="Hotspots">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Hotspots</span>
             </a>
-            <a href="#" class="nav-item" data-section="predictions">
+            <a href="#" class="nav-item" data-section="predictions" data-tooltip="Predictions">
                 <i class="fas fa-chart-line"></i>
                 <span>Predictions</span>
             </a>
-            <a href="#" class="nav-item" data-section="reports">
+            <a href="#" class="nav-item" data-section="reports" data-tooltip="Report Issue">
                 <i class="fas fa-flag"></i>
                 <span>Report Issue</span>
             </a>
-            <a href="#" class="nav-item" data-section="analytics">
+            <a href="#" class="nav-item" data-section="analytics" data-tooltip="Analytics">
                 <i class="fas fa-chart-bar"></i>
                 <span>Analytics</span>
             </a>
@@ -61,6 +65,9 @@
             </div>
         </div>
     </aside>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Content -->
     <main class="main-content">
