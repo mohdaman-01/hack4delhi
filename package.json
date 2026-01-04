@@ -1,0 +1,19 @@
+{
+  "name": "delhi-water-logging-platform",
+  "version": "1.0.0",
+  "description": "GIS-enabled web platform for mapping water-logging hotspots in Delhi",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Open index.html in your browser'",
+    "deploy": "netlify deploy --prod"
+  },
+  "keywords": [
+    "delhi",
+    "water-logging",
+    "gis",
+    "mapping",
+    "monitoring"
+  ],
+  "author": "",
+  "license": "MIT"
+}

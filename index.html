@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Real-time monitoring and prediction of water-logging hotspots across Delhi. Interactive GIS-enabled platform for citizens and civic agencies.">
+    <meta name="keywords" content="Delhi, water-logging, monsoon, hotspots, GIS, mapping, real-time monitoring">
+    <meta name="author" content="Delhi Water Watch">
+    <meta property="og:title" content="Delhi Water-Logging Hotspots | Real-Time Monitoring">
+    <meta property="og:description" content="Interactive platform for monitoring and predicting water-logging hotspots across Delhi">
+    <meta property="og:type" content="website">
+    <title>Delhi Water-Logging Hotspots | Real-Time Monitoring</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-water"></i>
+            <h1>Delhi<br>Water Watch</h1>
+        </div>
+        
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-section="map">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Live Map</span>
+            </a>
+            <a href="#" class="nav-item" data-section="hotspots">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Hotspots</span>
+            </a>
+            <a href="#" class="nav-item" data-section="predictions">
+                <i class="fas fa-chart-line"></i>
+                <span>Predictions</span>
+            </a>
+            <a href="#" class="nav-item" data-section="reports">
+                <i class="fas fa-flag"></i>
+                <span>Report Issue</span>
+            </a>
+            <a href="#" class="nav-item" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="weather-widget">
+                <i class="fas fa-cloud-rain"></i>
+                <div>
+                    <p class="weather-temp">28°C</p>
+                    <p class="weather-status">Moderate Rain</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+            <div class="header">
+                <div>
+                    <h2>Dashboard Overview</h2>
+                    <p class="subtitle">Real-time water-logging monitoring across Delhi</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search location...">
+                    </div>
+                    <button class="btn-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card critical">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>12</h3>
+                        <p>Critical Zones</p>
+                        <span class="stat-change up">+3 from yesterday</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>28</h3>
+                        <p>Warning Zones</p>
+                        <span class="stat-change up">+5 from yesterday</span>
+                    </div>
+                </div>
+                <div class="stat-card safe">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>145</h3>
+                        <p>Safe Zones</p>
+                        <span class="stat-change down">-8 from yesterday</span>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>47</h3>
+                        <p>Citizen Reports</p>
+                        <span class="stat-change up">+12 today</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card map-preview">
+                    <div class="card-header">
+                        <h3>Live Hotspot Map</h3>
+                        <button class="btn-text">View Full Map <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div id="preview-map" class="preview-map-container"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Alerts</h3>
+                        <button class="btn-text">View All</button>
+                    </div>
+                    <div class="alerts-list">
+                        <div class="alert-item critical">
+                            <div class="alert-indicator"></div>
+                            <div class="alert-content">
+                                <h4>Minto Bridge Underpass</h4>
+                                <p>Severe water-logging reported - 2.5ft depth</p>
+                                <span class="alert-time"><i class="fas fa-clock"></i> 15 mins ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item warning">
+                            <div class="alert-indicator"></div>
+                            <div class="alert-content">
+                                <h4>ITO Junction</h4>
+                                <p>Moderate water accumulation detected</p>
+                                <span class="alert-time"><i class="fas fa-clock"></i> 32 mins ago</span>
+                            </div>
+                        </div>
+                        <div class="alert-item warning">
+                            <div class="alert-indicator"></div>
+                            <div class="alert-content">
+                                <h4>Pul Prahladpur</h4>
+                                <p>Rising water levels - monitoring</p>
+                                <span class="alert-time"><i class="fas fa-clock"></i> 1 hour ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3>Top 10 Water-Logging Hotspots</h3>
+                    <select class="filter-select">
+                        <option>Last 24 Hours</option>
+                        <option>Last Week</option>
+                        <option>Last Month</option>
+                    </select>
+                </div>
+                <div class="hotspots-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Location</th>
+                                <th>Ward</th>
+                                <th>Severity</th>
+                                <th>Water Depth</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hotspots-tbody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section id="map" class="content-section">
+            <div class="header">
+                <div>
+                    <h2>Live Water-Logging Map</h2>
+                    <p class="subtitle">Interactive map showing real-time conditions</p>
+                </div>
+                <div class="map-controls">
+                    <button class="btn-secondary"><i class="fas fa-layer-group"></i> Layers</button>
+                    <button class="btn-secondary"><i class="fas fa-filter"></i> Filter</button>
+                    <button class="btn-primary"><i class="fas fa-sync"></i> Refresh</button>
+                </div>
+            </div>
+            <div class="map-container">
+                <div id="main-map"></div>
+                <div class="map-legend">
+                    <h4>Legend</h4>
+                    <div class="legend-item">
+                        <span class="legend-color critical"></span>
+                        <span>Critical (>2ft)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color warning"></span>
+                        <span>Warning (1-2ft)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color moderate"></span>
+                        <span>Moderate (<1ft)</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color safe"></span>
+                        <span>Safe</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hotspots Section -->
+        <section id="hotspots" class="content-section">
+            <div class="header">
+                <div>
+                    <h2>Water-Logging Hotspots</h2>
+                    <p class="subtitle">Detailed analysis of problem areas</p>
+                </div>
+            </div>
+            <div class="hotspots-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Predictions Section -->
+        <section id="predictions" class="content-section">
+            <div class="header">
+                <div>
+                    <h2>Predictive Analytics</h2>
+                    <p class="subtitle">AI-powered water-logging predictions</p>
+                </div>
+            </div>
+            <div class="predictions-content">
+                <div class="card">
+                    <h3>24-Hour Forecast</h3>
+                    <div id="forecast-chart" class="chart-container"></div>
+                </div>
+                <div class="card">
+                    <h3>Risk Assessment by Zone</h3>
+                    <div class="risk-zones">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section">
+            <div class="header">
+                <div>
+                    <h2>Report Water-Logging</h2>
+                    <p class="subtitle">Help us track water-logging in your area</p>
+                </div>
+            </div>
+            <div class="report-form-container">
+                <form class="report-form">
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" placeholder="Enter location or use map">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Severity Level</label>
+                            <select>
+                                <option>Select severity</option>
+                                <option>Critical</option>
+                                <option>High</option>
+                                <option>Moderate</option>
+                                <option>Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Water Depth (approx)</label>
+                            <input type="text" placeholder="e.g., 1.5 feet">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="4" placeholder="Describe the situation..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Photo (Optional)</label>
+                        <div class="file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to upload or drag and drop</p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Submit Report</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="content-section">
+            <div class="header">
+                <div>
+                    <h2>Analytics & Insights</h2>
+                    <p class="subtitle">Historical data and trends</p>
+                </div>
+            </div>
+            <div class="analytics-grid">
+                <div class="card">
+                    <h3>Monthly Trends</h3>
+                    <div id="trends-chart" class="chart-container"></div>
+                </div>
+                <div class="card">
+                    <h3>Ward-wise Distribution</h3>
+                    <div id="ward-chart" class="chart-container"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
